@@ -1,6 +1,7 @@
 package v1alpha1
 
 // TTLStrategy is the strategy for the time to live depending on if the workflow succeeded or failed.
+// Note: SecondsAfterCompletion takes precedence if multiple fields are set.
 type TTLStrategy struct {
 	// SecondsAfterCompletion is the number of seconds to live after completion
 	// +optional
@@ -45,4 +46,13 @@ func (t *TTLStrategy) IsZero() bool {
 	return t.SecondsAfterCompletion == nil &&
 		t.SecondsAfterSuccess == nil &&
 		t.SecondsAfterFailure == nil
+}
+
+// HasSuccessOrFailureTTL returns true if either success or failure TTL is set,
+// which allows more granular cleanup behavior than SecondsAfterCompletion alone.
+func (t *TTLStrategy) HasSuccessOrFailureTTL() bool {
+	if t == nil {
+		return false
+	}
+	return t.SecondsAfterSuccess != nil || t.SecondsAfterFailure != nil
 }
