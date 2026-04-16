@@ -37,8 +37,19 @@ func TestTTLStrategyIsZero(t *testing.T) {
 	})
 
 	// A strategy with zero value pointers (pointing to 0) should NOT be considered zero
+	// because the user explicitly set the field, even if the value is 0.
 	t.Run("with zero-value pointer fields", func(t *testing.T) {
 		s := &TTLStrategy{SecondsAfterCompletion: int32Ptr(0)}
+		assert.False(t, s.IsZero())
+	})
+
+	// All three fields set — also not zero
+	t.Run("with all fields set", func(t *testing.T) {
+		s := &TTLStrategy{
+			SecondsAfterCompletion: int32Ptr(60),
+			SecondsAfterSuccess:    int32Ptr(120),
+			SecondsAfterFailure:    int32Ptr(30),
+		}
 		assert.False(t, s.IsZero())
 	})
 }
