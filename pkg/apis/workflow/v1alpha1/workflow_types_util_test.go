@@ -23,6 +23,8 @@ func newTestWorkflow(phase WorkflowPhase, finishedAt metav1.Time) *Workflow {
 func TestIsCompleted(t *testing.T) {
 	assert.True(t, newTestWorkflow(WorkflowSucceeded, metav1.Now()).IsCompleted())
 	assert.True(t, newTestWorkflow(WorkflowFailed, metav1.Now()).IsCompleted())
+	// WorkflowError should also be considered completed
+	assert.True(t, newTestWorkflow(WorkflowError, metav1.Now()).IsCompleted())
 	assert.False(t, newTestWorkflow(WorkflowRunning, metav1.Time{}).IsCompleted())
 	assert.False(t, newTestWorkflow(WorkflowPending, metav1.Time{}).IsCompleted())
 }
