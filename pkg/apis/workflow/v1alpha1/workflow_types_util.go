@@ -25,6 +25,7 @@ func (w *Workflow) IsRunning() bool {
 }
 
 // IsFailed returns true if the workflow has failed.
+// Note: WorkflowError is treated as a failure for TTL and status purposes.
 func (w *Workflow) IsFailed() bool {
 	return w.Status.Phase == WorkflowFailed || w.Status.Phase == WorkflowError
 }
@@ -43,6 +44,7 @@ func (w *Workflow) GetTTLStrategy() *TTLStrategy {
 }
 
 // HasExpired returns true if the workflow has exceeded its TTL.
+// TTL precedence: SecondsAfterSuccess > SecondsAfterFailure > SecondsAfterCompletion.
 func (w *Workflow) HasExpired() bool {
 	ttl := w.GetTTLStrategy()
 	if ttl == nil || !w.IsCompleted() {
