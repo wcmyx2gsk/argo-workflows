@@ -27,6 +27,8 @@ func TestIsCompleted(t *testing.T) {
 	assert.True(t, newTestWorkflow(WorkflowError, metav1.Now()).IsCompleted())
 	assert.False(t, newTestWorkflow(WorkflowRunning, metav1.Time{}).IsCompleted())
 	assert.False(t, newTestWorkflow(WorkflowPending, metav1.Time{}).IsCompleted())
+	// WorkflowUnknown phase should not be considered completed
+	assert.False(t, newTestWorkflow(WorkflowUnknown, metav1.Time{}).IsCompleted())
 }
 
 func TestIsRunning(t *testing.T) {
@@ -63,4 +65,6 @@ func TestGetDuration(t *testing.T) {
 	w := newTestWorkflow(WorkflowSucceeded, finishedAt)
 	duration := w.GetDuration()
 	assert.Greater(t, duration.Seconds(), float64(0))
+	// duration should be approximately 2 minutes (within a reasonable margin)
+	assert.Less(t, duration.Seconds(), float64(300))
 }
