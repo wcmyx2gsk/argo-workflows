@@ -21,6 +21,10 @@ const (
 	WorkflowFailed WorkflowPhase = "Failed"
 	// WorkflowError means the workflow had an error.
 	WorkflowError WorkflowPhase = "Error"
+
+	// DefaultActiveDeadlineSeconds is the default maximum duration (in seconds) a workflow
+	// is allowed to run before being terminated. Set to 0 to disable by default.
+	DefaultActiveDeadlineSeconds int64 = 86400 // 24 hours
 )
 
 // Workflow is the definition of a workflow resource.
@@ -43,7 +47,8 @@ type WorkflowSpec struct {
 
 	// ActiveDeadlineSeconds is an optional duration in seconds relative to the
 	// workflow start time which the workflow is allowed to run before the
-	// controller terminates the workflow.
+	// controller terminates the workflow. Defaults to DefaultActiveDeadlineSeconds (24h)
+	// if not specified.
 	ActiveDeadlineSeconds *int64 `json:"activeDeadlineSeconds,omitempty" protobuf:"varint,3,opt,name=activeDeadlineSeconds"`
 }
 
@@ -66,21 +71,4 @@ type WorkflowStatus struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type WorkflowList struct {
 	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata" protobuf:"bytes,1,opt,name=metadata"`
-	Items           []Workflow `json:"items" protobuf:"bytes,2,rep,name=items"`
-}
-
-// DeepCopyObject implements the runtime.Object interface.
-func (w *Workflow) DeepCopyObject() interface{} {
-	return w.DeepCopy()
-}
-
-// DeepCopy returns a deep copy of the Workflow.
-func (w *Workflow) DeepCopy() *Workflow {
-	if w == nil {
-		return nil
-	}
-	out := new(Workflow)
-	*out = *w
-	return out
-}
+	metav1.ListMeta `json:"metadata" protobuf:"bytes,1,opt,name=m`
