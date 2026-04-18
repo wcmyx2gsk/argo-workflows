@@ -34,6 +34,8 @@ func TestIsCompleted(t *testing.T) {
 func TestIsRunning(t *testing.T) {
 	assert.True(t, newTestWorkflow(WorkflowRunning, metav1.Time{}).IsRunning())
 	assert.False(t, newTestWorkflow(WorkflowSucceeded, metav1.Now()).IsRunning())
+	// A pending workflow should not be considered running
+	assert.False(t, newTestWorkflow(WorkflowPending, metav1.Time{}).IsRunning())
 }
 
 func TestIsFailed(t *testing.T) {
