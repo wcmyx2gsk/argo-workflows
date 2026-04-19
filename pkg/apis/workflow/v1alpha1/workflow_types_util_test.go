@@ -68,5 +68,8 @@ func TestGetDuration(t *testing.T) {
 	duration := w.GetDuration()
 	assert.Greater(t, duration.Seconds(), float64(0))
 	// duration should be approximately 2 minutes (within a reasonable margin)
+	// using 300s (5 min) as upper bound since creation timestamp is also -5 min
 	assert.Less(t, duration.Seconds(), float64(300))
+	// sanity check: duration should be at least 1 minute
+	assert.GreaterOrEqual(t, duration.Seconds(), float64(60))
 }
