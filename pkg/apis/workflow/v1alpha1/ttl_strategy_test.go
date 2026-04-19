@@ -52,6 +52,12 @@ func TestTTLStrategyIsZero(t *testing.T) {
 		}
 		assert.False(t, s.IsZero())
 	})
+
+	// Only SecondsAfterFailure set — useful for retaining failed workflows longer for debugging
+	t.Run("with only SecondsAfterFailure set for debug retention", func(t *testing.T) {
+		s := &TTLStrategy{SecondsAfterFailure: int32Ptr(3600)}
+		assert.False(t, s.IsZero())
+	})
 }
 
 func TestTTLStrategyGetters(t *testing.T) {
