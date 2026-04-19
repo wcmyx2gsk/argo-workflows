@@ -36,6 +36,7 @@ func (w *Workflow) IsSucceeded() bool {
 }
 
 // GetTTLStrategy returns the effective TTL strategy for the workflow.
+// Returns nil if no TTL strategy is configured.
 func (w *Workflow) GetTTLStrategy() *TTLStrategy {
 	if w.Spec.TTLStrategy != nil {
 		return w.Spec.TTLStrategy
@@ -45,6 +46,7 @@ func (w *Workflow) GetTTLStrategy() *TTLStrategy {
 
 // HasExpired returns true if the workflow has exceeded its TTL.
 // TTL precedence: SecondsAfterSuccess > SecondsAfterFailure > SecondsAfterCompletion.
+// Note: a workflow must be both completed and have a non-zero FinishedAt to be considered expired.
 func (w *Workflow) HasExpired() bool {
 	ttl := w.GetTTLStrategy()
 	if ttl == nil || !w.IsCompleted() {
