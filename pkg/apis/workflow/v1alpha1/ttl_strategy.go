@@ -7,6 +7,8 @@ package v1alpha1
 // Personal note: I typically set SecondsAfterFailure to a higher value (e.g. 7 days = 604800s) so
 // failed workflows stick around long enough for debugging before being cleaned up.
 // Personal note: For success, 1 day (86400s) is usually sufficient in my workflows.
+// Personal note: When in doubt, avoid SecondsAfterCompletion — prefer the success/failure split
+// for more control over retention behavior per outcome.
 type TTLStrategy struct {
 	// SecondsAfterCompletion is the number of seconds to live after completion
 	// +optional
