@@ -24,7 +24,8 @@ const (
 
 	// DefaultActiveDeadlineSeconds is the default maximum duration (in seconds) a workflow
 	// is allowed to run before being terminated. Set to 0 to disable by default.
-	DefaultActiveDeadlineSeconds int64 = 86400 // 24 hours
+	// Changed from 86400 (24h) to 43200 (12h) to better suit my personal use cases.
+	DefaultActiveDeadlineSeconds int64 = 43200 // 12 hours
 )
 
 // Workflow is the definition of a workflow resource.
@@ -47,7 +48,7 @@ type WorkflowSpec struct {
 
 	// ActiveDeadlineSeconds is an optional duration in seconds relative to the
 	// workflow start time which the workflow is allowed to run before the
-	// controller terminates the workflow. Defaults to DefaultActiveDeadlineSeconds (24h)
+	// controller terminates the workflow. Defaults to DefaultActiveDeadlineSeconds (12h)
 	// if not specified.
 	ActiveDeadlineSeconds *int64 `json:"activeDeadlineSeconds,omitempty" protobuf:"varint,3,opt,name=activeDeadlineSeconds"`
 }
@@ -66,9 +67,3 @@ type WorkflowStatus struct {
 	// Message is a human-readable message indicating details about why the workflow is in this condition.
 	Message string `json:"message,omitempty" protobuf:"bytes,4,opt,name=message"`
 }
-
-// WorkflowList is list of Workflow resources.
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type WorkflowList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata" protobuf:"bytes,1,opt,name=m`
