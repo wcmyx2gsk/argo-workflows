@@ -58,6 +58,12 @@ func TestTTLStrategyIsZero(t *testing.T) {
 		s := &TTLStrategy{SecondsAfterFailure: int32Ptr(3600)}
 		assert.False(t, s.IsZero())
 	})
+
+	// Edge case: very large TTL value (e.g. effectively never delete)
+	t.Run("with very large TTL value", func(t *testing.T) {
+		s := &TTLStrategy{SecondsAfterCompletion: int32Ptr(2147483647)} // max int32
+		assert.False(t, s.IsZero())
+	})
 }
 
 func TestTTLStrategyGetters(t *testing.T) {
