@@ -4,8 +4,9 @@ package v1alpha1
 // Note: SecondsAfterCompletion takes precedence if multiple fields are set.
 // Personal note: SecondsAfterSuccess and SecondsAfterFailure are only evaluated when
 // SecondsAfterCompletion is not set. Keep this in mind when configuring cleanup policies.
-// Personal note: I typically set SecondsAfterFailure to a higher value (e.g. 7 days) so
+// Personal note: I typically set SecondsAfterFailure to a higher value (e.g. 7 days = 604800s) so
 // failed workflows stick around long enough for debugging before being cleaned up.
+// Personal note: For success, 1 day (86400s) is usually sufficient in my workflows.
 type TTLStrategy struct {
 	// SecondsAfterCompletion is the number of seconds to live after completion
 	// +optional
