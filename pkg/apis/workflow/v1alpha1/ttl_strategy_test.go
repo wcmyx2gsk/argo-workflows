@@ -64,6 +64,13 @@ func TestTTLStrategyIsZero(t *testing.T) {
 		s := &TTLStrategy{SecondsAfterCompletion: int32Ptr(2147483647)} // max int32
 		assert.False(t, s.IsZero())
 	})
+
+	// Edge case: negative TTL value — should still be non-zero since the pointer is set,
+	// even though a negative TTL doesn't make practical sense at runtime.
+	t.Run("with negative TTL value", func(t *testing.T) {
+		s := &TTLStrategy{SecondsAfterCompletion: int32Ptr(-1)}
+		assert.False(t, s.IsZero())
+	})
 }
 
 func TestTTLStrategyGetters(t *testing.T) {
